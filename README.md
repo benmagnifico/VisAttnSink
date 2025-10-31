@@ -10,6 +10,8 @@ This repository contains the code for [See What You Are Told: Visual Attention S
 - [Environment Setup](#environment-setup)
 - [Dataset Structure](#dataset-structure)
 - [Running Experiments](#running-experiments)
+- [Visualization](#visualization)
+- [Evaluation](#evaluation)
 - [Acknowledgements](#acknowledgements)
 
 ---
@@ -92,6 +94,44 @@ Make sure to update the placeholder values with your specific settings:
     - path_model: Path to the model checkpoint.
 </COMMENTS>
 ```
+
+## Visualization
+
+This repository includes comprehensive tools for visualizing the visual attention sink phenomenon in LLaVA-1.5-7B:
+
+### Quick Start
+
+```bash
+# Run inference with attention capture
+python src/inference_with_visualization.py \
+    --device 0 \
+    --exp_config A_exps/lv1.5_7b_viz.yml
+
+# Generate visualizations
+python src/visualization/visualize_attention.py \
+    --attention_file F_visualizations/attention_qid1.pkl
+```
+
+### Features
+
+- **Attention Heatmaps**: Visualize complete attention matrices across layers and heads
+- **Sink Detection**: Automatically identify and highlight visual attention sink tokens
+- **Distribution Analysis**: Analyze attention distribution across visual tokens
+- **Layer Comparison**: Compare attention patterns across different model layers
+
+### Documentation
+
+- **[Visualization Guide](VISUALIZATION_GUIDE.md)**: Complete guide for reproducing experiments and generating visualizations
+- **[Example Walkthrough](EXAMPLE.md)**: Step-by-step example with detailed explanations
+- **Quick Start Script**: `bash B_scripts/quickstart_visualization.sh`
+
+### Output Examples
+
+The visualization tools generate:
+- Attention heatmaps showing query-key attention patterns
+- Sink identification plots highlighting tokens that act as attention sinks
+- Visual attention distribution graphs across different heads
+- Layer-wise comparison plots showing attention evolution
 
 ## Evaluation
 

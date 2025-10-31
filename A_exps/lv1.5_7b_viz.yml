@@ -1,0 +1,25 @@
+name_exp: lv1.5_7b_visualization
+name_daset: POPE
+name_category: random
+
+# Paths - Update these with your actual paths
+path_image_dir: /path/to/coco/val2014
+path_question_dir: D_datasets/POPE/Questions
+path_model: /path/to/llava-v1.5-7b
+
+conv_mode: vicuna_v1
+
+# Visual Attention Sink Logic Parameters
+logic: 1
+tau: 20
+rho: 0.5
+p: 0.6
+summ: 0.2
+
+# Generation Parameters
+max_new_tokens: 128
+except_last_layer: 1
+
+# Visualization Parameters
+capture_attention: true
+max_viz_questions: 5  # Limit number of questions to visualize (for faster testing)

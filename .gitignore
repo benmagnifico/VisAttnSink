@@ -65,5 +65,12 @@ answers/
 !env_conda.txt
 !env_pip.txt
 !README.md
+!VISUALIZATION_GUIDE.md
+!EXAMPLE.md
 llava/serve/
+
+# Visualization outputs
+F_visualizations/
+E_answers/
+D_datasets/
 
