@@ -1,0 +1,29 @@
+# Experiment 2: Logit Ranking Failure
+# This experiment demonstrates that key-based relevance (Q·K^T) is unreliable
+
+name_exp: logit_ranking_experiment
+experiment_type: logit_ranking
+
+# Model configuration
+path_model: YOUR_PATH_TO_MODEL  # e.g., liuhaotian/llava-v1.5-7b
+model_base: null  # Set if using LoRA
+
+# Dataset configuration
+dataset_path: C_datasets/refcoco
+dataset_split: val  # train, val, or test
+
+# Experiment parameters
+num_samples: 50  # Number of samples to analyze
+k_values: [5, 10, 20, 50]  # Different K values for Top-K pollution rate
+ich_threshold: 0.3  # Threshold for Image-Centric Head detection
+
+# Layer analysis
+analyze_layers: null  # null for all layers, or list like [10, 20, 30]
+
+# Output configuration
+output_dir: E_experiments/logit_ranking
+save_visualizations: true
+save_ranking_details: true
+
+# Device configuration
+device: 0  # CUDA device number
