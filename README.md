@@ -10,6 +10,8 @@ This repository contains the code for [See What You Are Told: Visual Attention S
 - [Environment Setup](#environment-setup)
 - [Dataset Structure](#dataset-structure)
 - [Running Experiments](#running-experiments)
+- [VAR Assumption Validation Experiments](#var-assumption-validation-experiments)
+- [Evaluation](#evaluation)
 - [Acknowledgements](#acknowledgements)
 
 ---
@@ -96,6 +98,51 @@ Make sure to update the placeholder values with your specific settings:
 ## Evaluation
 
 We follow the LLaVA evaluation methodology. For detailed evaluation instructions, please refer to this [link](https://github.com/haotian-liu/LLaVA/tree/main/llava/eval).
+
+---
+
+## VAR Assumption Validation Experiments
+
+This repository includes two experiments designed to validate and challenge assumptions made in the VAR (Visual Attention Redistribution) method:
+
+### Experiment 1: g_HarmfulRecycling_Intervention
+
+**Objective**: Prove that "relevant tokens" can be misclassified as "sink tokens", causing VAR to harm performance.
+
+This experiment demonstrates the existence of **"Relevant Sink Tokens"** - tokens that are both semantically relevant to the query AND incorrectly identified as attention sinks (φ(x) ≥ τ). When VAR recycles attention from these tokens, it actively damages model performance.
+
+### Experiment 2: g_LogitRanking_Failure
+
+**Objective**: Prove that key-based relevance (Q·K^T logits) is unreliable for ranking token importance.
+
+This experiment shows that even consensus scores across Image-Centric Heads cannot reliably distinguish relevant from irrelevant tokens, with **Top-K pollution rates** often exceeding 50%.
+
+### Quick Start
+
+```bash
+# Run both experiments
+bash B_scripts/run_experiments.sh \
+  --experiment both \
+  --model /path/to/llava-v1.5-7b \
+  --dataset C_datasets/refcoco
+
+# Run only harmful recycling experiment
+python src/run_experiments.py \
+  --experiment harmful_recycling \
+  --model_path /path/to/llava-v1.5-7b \
+  --tau 20.0 \
+  --num_search_samples 100
+
+# Run only logit ranking experiment
+python src/run_experiments.py \
+  --experiment logit_ranking \
+  --model_path /path/to/llava-v1.5-7b \
+  --num_logit_samples 50
+```
+
+For detailed documentation, see [EXPERIMENTS_README.md](EXPERIMENTS_README.md).
+
+---
 
 ## License
 

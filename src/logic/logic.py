@@ -90,6 +90,7 @@ class LogicEngine:
         cls.forked_head_per_token = _defaultVars.forked_head_per_token
         
 class DimProspector(LogicEngine):
+    _excluded_tokens = None  # Tokens to exclude from sink detection
     
     @classmethod
     def fix_dim(cls, llm_name="llama-7b"):
@@ -107,6 +108,16 @@ class DimProspector(LogicEngine):
         rms_values = torch.stack([rms_norm_hs[:, :, idx] for idx in cls.__base__.dim_sink], dim=-1) # [bsz, tok, 2]
         max_rms_values = torch.max(rms_values, dim=-1)[0] # [bsz, tok]
         indices = torch.nonzero(max_rms_values > cls.tau)[:, 1] # [batch_axis, token_axis] -> [token_axis]
+        
+        # Exclude specified tokens if set (for control experiments)
+        if cls._excluded_tokens is not None and len(cls._excluded_tokens) > 0:
+            # Remove excluded tokens from indices
+            mask = torch.ones(len(indices), dtype=torch.bool, device=indices.device)
+            for i, idx in enumerate(indices):
+                if idx in cls._excluded_tokens:
+                    mask[i] = False
+            indices = indices[mask]
+        
         cls.__base__.indices[layer]=indices # []
 
 class HeadFork(LogicEngine):

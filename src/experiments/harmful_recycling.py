@@ -198,14 +198,25 @@ class HarmfulRecyclingExperiment:
     
     def _set_excluded_sink_tokens(self, indices: Optional[torch.Tensor]):
         """Mark certain tokens to be excluded from sink detection."""
-        if not hasattr(DimProspector, '_excluded_tokens'):
+        from src.stash import MetadataStation
+        
+        if indices is None or len(indices) == 0:
             DimProspector._excluded_tokens = None
-        DimProspector._excluded_tokens = indices
+            return
+        
+        # Convert relative indices (within image tokens) to absolute indices
+        # Get image token starting position
+        im = MetadataStation.segments['begin_pos'].get('image', -1)
+        if im >= 0:
+            # Add offset to make them absolute indices
+            absolute_indices = indices + im
+            DimProspector._excluded_tokens = absolute_indices
+        else:
+            DimProspector._excluded_tokens = indices
     
     def _clear_excluded_sink_tokens(self):
         """Clear excluded tokens."""
-        if hasattr(DimProspector, '_excluded_tokens'):
-            DimProspector._excluded_tokens = None
+        DimProspector._excluded_tokens = None
     
     def search_for_samples_with_relevant_sinks(
         self,
