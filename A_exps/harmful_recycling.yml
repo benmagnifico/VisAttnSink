@@ -1,0 +1,32 @@
+# Experiment 1: Harmful Recycling Intervention
+# This experiment demonstrates that "relevant tokens" can be misclassified as "sink tokens"
+
+name_exp: harmful_recycling_experiment
+experiment_type: harmful_recycling
+
+# Model configuration
+path_model: YOUR_PATH_TO_MODEL  # e.g., liuhaotian/llava-v1.5-7b
+model_base: null  # Set if using LoRA
+
+# Dataset configuration
+dataset_path: C_datasets/refcoco
+dataset_split: val  # train, val, or test
+
+# VAR parameters
+tau: 20.0  # Threshold for sink token detection (φ(x) >= τ)
+rho: 0.5   # Maximum proportion of attention to sink tokens for ICH
+summ: 0.2  # Minimum attention sum to image tokens
+p: 0.6     # Attention recycling factor
+
+# Experiment parameters
+num_search_samples: 100  # Number of samples to search for relevant sinks
+num_intervention_samples: 5  # Number of samples to run intervention on
+min_relevant_sinks: 1  # Minimum relevant sinks to qualify
+
+# Output configuration
+output_dir: E_experiments/harmful_recycling
+save_visualizations: true
+save_intermediate_results: true
+
+# Device configuration
+device: 0  # CUDA device number
