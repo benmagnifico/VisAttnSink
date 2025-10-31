@@ -10,6 +10,8 @@ This repository contains the code for [See What You Are Told: Visual Attention S
 - [Environment Setup](#environment-setup)
 - [Dataset Structure](#dataset-structure)
 - [Running Experiments](#running-experiments)
+- [VAR Critique Experiments](#var-critique-experiments)
+- [Evaluation](#evaluation)
 - [Acknowledgements](#acknowledgements)
 
 ---
@@ -96,6 +98,47 @@ Make sure to update the placeholder values with your specific settings:
 ## Evaluation
 
 We follow the LLaVA evaluation methodology. For detailed evaluation instructions, please refer to this [link](https://github.com/haotian-liu/LLaVA/tree/main/llava/eval).
+
+## VAR Critique Experiments
+
+This repository includes two experimental setups designed to demonstrate potential limitations of the VAR approach. These experiments are located in the `E_experiments/` directory and can be used as motivation for follow-up research.
+
+### Experiment 1: Harmful Recycling Intervention
+**Goal**: Demonstrate that VAR's sink detection mechanism can misidentify relevant tokens as sinks, leading to performance degradation.
+
+**Key Finding**: "Relevant Sink Tokens" exist - tokens that are semantically important but get flagged as sinks due to high φ(x) values. When VAR recycles attention from these tokens, it harms model performance.
+
+### Experiment 2: Logit Ranking Failure  
+**Goal**: Demonstrate that Q·K^T logits are unreliable for ranking token importance.
+
+**Key Finding**: Even with consensus across Image-Centric Heads, the model frequently ranks irrelevant background tokens higher than relevant object tokens, resulting in high "Top-K contamination rates."
+
+### Running the Experiments
+
+See [`E_experiments/README.md`](E_experiments/README.md) for detailed instructions on:
+- Dataset preparation (RefCOCO format with bounding boxes)
+- Configuration setup
+- Running both experiments
+- Interpreting results
+
+Quick start:
+```bash
+# Run Experiment 1: Harmful Recycling Intervention
+python E_experiments/g_harmful_recycling_intervention.py \
+  --exp_config A_exps/exp1_harmful_recycling.yml \
+  --device 0 --max_samples 100
+
+# Run Experiment 2: Logit Ranking Failure
+python E_experiments/g_logit_ranking_failure.py \
+  --exp_config A_exps/exp2_logit_ranking.yml \
+  --device 0 --max_samples 100
+
+# Or use the launcher script
+./E_experiments/run_experiments.sh both --device 0
+```
+
+Results will be saved in `F_experiment_results/` with detailed JSON outputs and HTML visualizations.
+
 
 ## License
 

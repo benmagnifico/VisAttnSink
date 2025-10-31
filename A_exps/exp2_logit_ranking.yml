@@ -1,0 +1,20 @@
+name_exp: logit_ranking_failure
+name_daset: refcoco
+name_category: testA
+
+# Update these paths with your actual paths
+path_image_dir: /path/to/refcoco/images
+path_question_dir: /path/to/refcoco/questions
+path_model: /path/to/llava-1.5-7b
+
+conv_mode: vicuna_v1
+
+# VAR parameters (not used in this experiment, but needed for model loading)
+logic: 0
+tau: 20
+rho: 0.5
+p: 0.6
+summ: 0.2
+
+max_new_tokens: 128
+except_last_layer: 1
